@@ -170,6 +170,7 @@ app.post("/updatebalance", function (req, res) {
         const person = db.collection("balance").updateOne({username:username},{$set:{username:username,balance:operation=="+"?current+cost:current-cost}},async(err)=>{
           console.log(err);
         });
+        res.json("balance updated");
       } //login
     });
 });
