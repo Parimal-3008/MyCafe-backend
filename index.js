@@ -43,13 +43,14 @@ app.post("/register", function (req, res) {
     .collection("users")
     .findOne({ username: username }, async (err, user) => {
       if (err) {
-        res.json("error");
-        return;
+        // res.json("error");
+        res.end();
       } else if (user == null) {
+        
       } else {
         res.json(" found");
         res.end();
-        return;
+       
       }
     });
   const person2 = db
@@ -57,8 +58,8 @@ app.post("/register", function (req, res) {
     .insertOne(
       { username: username, password: password },
       async (err, user) => {
-        if (err != null) console.log(err);
-        else if (user != null) console.log(user);
+        if (err != null){ console.log(err); res.end();}
+        else if (user != null) {console.log(user); res.end();}
       }
     );
   const person3 = db
@@ -71,7 +72,7 @@ app.post("/register", function (req, res) {
       async (err, user) => {
         if (err != null) {
           console.log(err);
-          // res.json("error in userdata collection");
+          res.end();
         } else console.log("created in userdata");
       }
     );
@@ -85,10 +86,11 @@ app.post("/register", function (req, res) {
       async (err, user) => {
         if (err != null) {
           console.log(err);
-          // res.json("error in balnce collection");
+          res.end();
         } else console.log("created in balance");
       }
     );
+    res.sendStatus(200);
 });
 app.post("/login", function (req, res) {
   let username = req.body.username; //
