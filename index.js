@@ -167,7 +167,7 @@ app.post("/updatebalance", function (req, res) {
   db.collection("balance").findOne({ username: username }, async (err, current) => {
       if (err) res.json("error");
       else {
-        const person = db.collection("balance").updateOne({username:username},{$set:{username:username,balance:operation=="+"?current+cost:current-cost}},async(err)=>{
+        const person = db.collection("balance").updateOne({username:username},{$set:{username:username,balance:operation=="+"?(Number(current.balance)+Number(cost)):(Number(current.balance)-Number(cost))}},async(err)=>{
           console.log(err);
         });
         res.json("balance updated");
