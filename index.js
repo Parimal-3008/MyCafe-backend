@@ -68,7 +68,7 @@ function createbalance(username)
     return 'done';
 }
 app.post("/register", function (req, res) {
-  let username = req.body.username; //
+  let username = (req.body.username); //
   let password = req.body.password; // hashed password
   console.log(username + " " + password);
   const person = db
@@ -84,7 +84,8 @@ app.post("/register", function (req, res) {
         res.json(status);
         
       } else {
-        res.json("found");
+        // res.json("found");
+        res.sendStatus(400);
         return;
       }
     });
