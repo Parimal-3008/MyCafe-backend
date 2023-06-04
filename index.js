@@ -34,7 +34,39 @@ const schema2 = new mongoose.Schema({
 mongoose.connect(process.env.DBURL);
 const user2 = mongoose.model("users", schema);
 const userdata2 = mongoose.model("userdata", schema2);
-
+function createusers( username,  password)
+{
+  const person2 = db.collection("users").insertOne({ username: username, password: password },async (err, user) => {
+      if (err != null){ console.log(err);return 'error';}
+      else if (user != null) {console.log(user);return 'useralready present';}
+    }
+  );
+  return 'done';
+}
+function createuserdata(username)
+{
+  const person3 = db.collection("userdata").insertOne({username: username,data: { id: [], date_time: [], order: [], status: [] },},
+    async (err, user) => {
+      if (err != null) {
+        console.log(err);
+        return 'error';
+      } 
+    }
+  );
+  
+  return 'done';
+}
+function createbalance(username)
+{
+  const person4 = db.collection("balance").insertOne({username: username,balance:0,},async (err, user) => {
+        if (err != null) {
+          console.log(err);
+         return 'error';
+        } 
+      }
+    );
+    return 'done';
+}
 app.post("/register", function (req, res) {
   let username = req.body.username; //
   let password = req.body.password; // hashed password
@@ -43,54 +75,22 @@ app.post("/register", function (req, res) {
     .collection("users")
     .findOne({ username: username }, async (err, user) => {
       if (err) {
-        // res.json("error");
-        res.end();
+        res.json("error");
+        return;
       } else if (user == null) {
+        let  status = createusers(username,password);
+        status = createuserdata(username);
+        status = createbalance(username);        
+        res.json(status);
         
       } else {
-        res.json(" found");
-        res.end();
-       
+        res.json("found");
+        return;
       }
     });
-  const person2 = db
-    .collection("users")
-    .insertOne(
-      { username: username, password: password },
-      async (err, user) => {
-        if (err != null){ console.log(err); res.end();}
-        else if (user != null) {console.log(user); res.end();}
-      }
-    );
-  const person3 = db
-    .collection("userdata")
-    .insertOne(
-      {
-        username: username,
-        data: { id: [], date_time: [], order: [], status: [] },
-      },
-      async (err, user) => {
-        if (err != null) {
-          console.log(err);
-          res.end();
-        } else console.log("created in userdata");
-      }
-    );
-    const person4 = db
-    .collection("balance")
-    .insertOne(
-      {
-        username: username,
-        balance:0,
-      },
-      async (err, user) => {
-        if (err != null) {
-          console.log(err);
-          res.end();
-        } else console.log("created in balance");
-      }
-    );
-    res.sendStatus(200);
+   
+ 
+    
 });
 app.post("/login", function (req, res) {
   let username = req.body.username; //
