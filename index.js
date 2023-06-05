@@ -166,12 +166,12 @@ app.post("/updatebalance", function (req, res) {
   let cost = req.body.cost;//number
   let operation = req.body.operation;
   db.collection("balance").findOne({ username: username }, async (err, current) => {
-      if (err) res.json("error");
+      if (err) res.sendStatus(404);
       else {
         const person = db.collection("balance").updateOne({username:username},{$set:{username:username,balance:operation=="+"?(Number(current.balance)+Number(cost)):(Number(current.balance)-Number(cost))}},async(err)=>{
           console.log(err);
         });
-        res.json("balance updated");
+        res.sendStatus(200);
       } //login
     });
 });
