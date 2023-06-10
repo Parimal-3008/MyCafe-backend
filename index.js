@@ -17,6 +17,7 @@ server.listen(process.env.PORT || 4000, () => {
 });
 
 app.use(express.json());
+app.use(cors());
 dotenv.config();
 const schema = new mongoose.Schema({
   username: String,
@@ -134,6 +135,7 @@ app.post("/adddata", function (req, res) {
   let username = req.body.username;
   let id = req.body.id;
   let time = req.body.date_time;
+  console.log(time);
   let order = req.body.order;
   let status = req.body.status;
   const user = db.collection("userdata").findOne({ username: username }, async (err, data) => {
